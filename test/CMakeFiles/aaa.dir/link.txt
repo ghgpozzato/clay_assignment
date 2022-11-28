@@ -1,0 +1,2 @@
+/usr/bin/ar qc libaaa.a CMakeFiles/aaa.dir/__/server/src/kvp_storage.cpp.o
+/usr/bin/ranlib libaaa.a

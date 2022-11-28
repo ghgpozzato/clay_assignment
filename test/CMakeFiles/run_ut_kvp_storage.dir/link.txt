@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/run_ut_kvp_storage.dir/test_kvp_storage.cpp.o -o run_ut_kvp_storage  -Wl,-rpath,/home/gpozzato/Repos/clay_assignment/server/src ../server/src/libKvpStorage.so /usr/lib/x86_64-linux-gnu/libgtest.a 

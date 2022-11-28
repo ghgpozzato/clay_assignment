@@ -1,0 +1,1 @@
+/usr/bin/c++ -rdynamic CMakeFiles/run_ut_kvp_server.dir/test_kvp_server.cpp.o -o run_ut_kvp_server  -Wl,-rpath,/home/gpozzato/Repos/clay_assignment/server/src ../server/src/libKvpServer.so /usr/lib/x86_64-linux-gnu/libgtest.a 
