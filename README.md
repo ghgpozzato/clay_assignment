@@ -18,6 +18,16 @@ cmake 3.24.2
 # Because of limited time the KVPStorage was implemented using standard map. Boost library or a database could be used to allow better load management.
 
 # Basic unit tests were were created. The executables are stored in the test folder.
+% ./test/run_ut_kvp_server
+% ./test/run_ut_kvp_client
+
+# To ensure integration was working properly, integration test cases using input files were created. This is done with the following command
+% ./KVPStorageServer_fin F_IN
+
+# F_IN has a list of commands.
+# A few test cases can be found in test/data. To confirm the success of the execution the storage was left readable. It can be found in the root folder "kvp_default.dat"
+
+# To ensure multiple clients the client can be executed without the server. This way multiple clients will wait for the server to be avaialble. When the server is available it will handle all the requests.
 
 # To execute the KVPStorage:
 

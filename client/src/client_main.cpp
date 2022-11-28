@@ -2,14 +2,27 @@
  * Main client application for the KVP Storage
 */
 #include <iostream>
+#include <fstream>
 #include <sstream>
 #include <iomanip>
+#include <filesystem>
 
 #include "kvp_client.hpp"
 
 using namespace std;
 
-int main() {
+int main(int argc, char** argv) {
+
+    ifstream *file_input = NULL;
+
+    filesystem::path curr_path = filesystem::current_path();
+
+    // If a file is passed it will read input from it first before getting the user input.
+    if (argc > 1) {
+        curr_path /= string(argv[1]);
+        cout << string(curr_path) << endl;
+        file_input = new ifstream(argv[1]);
+    }
 
     while (true) {
 
@@ -17,7 +30,15 @@ int main() {
 
         string cmd, key, value;
 
-        getline(cin, user_input);
+        if (file_input != NULL) {
+            if(!getline(*file_input, user_input)) {
+                getline(cin, user_input);
+            }
+        } else {
+            getline(cin, user_input);
+        }
+
+        cout << user_input << endl;
 
         stringstream user_input_ss(user_input);
 

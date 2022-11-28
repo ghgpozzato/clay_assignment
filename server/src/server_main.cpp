@@ -18,7 +18,7 @@ using namespace std;
 KvpServer *kvp_server = NULL;
 
 /**
- * \brief Exit handler used to save server when terminated by user.
+ * \brief Exit handler used to close the server when terminated by user.
 */
 void exit_handler(int s){
     
@@ -30,6 +30,9 @@ void exit_handler(int s){
     exit(s);
 }
 
+/**
+ * \brief Server main application. Wait for IPC messages from clients and then handle them.
+*/
 int main() {
 
     KvpMessageSt_t kvp_msg = {0};
@@ -43,15 +46,19 @@ int main() {
 
     try {
         while (true) {
-
+            // Loop in the message queue
             kvp_server->receive(&kvp_msg);
 
+            // Convert received IPC to data.
             buf_to_kvp_data(&kvp_msg, &kvp_data);
 
+            // Process data.
             kvp_server->execute(&kvp_data);
 
+            // Converted response data to IPC
             kvp_data_to_buf(&kvp_data, &kvp_msg);
 
+            // Send IPC
             kvp_server->respond(&kvp_msg);
         }
     } catch (...) {

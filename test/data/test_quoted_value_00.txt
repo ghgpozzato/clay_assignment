@@ -1,0 +1,2 @@
+SET 0 "Testing Quoted Value"
+GET 0
