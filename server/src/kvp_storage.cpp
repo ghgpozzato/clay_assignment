@@ -8,6 +8,7 @@
 
 #include <errno.h>
 #include <fstream>
+#include <filesystem>
 #include <iostream>
 #include <stdio.h>
 #include <stdexcept>
@@ -29,12 +30,17 @@ using namespace std;
 template <class T_key, class T_value>
 KvpStorage<T_key, T_value>::KvpStorage(string storage_name) {
 
-    m_storage_name = storage_name;
+    filesystem::path curr_path = filesystem::current_path();
+    curr_path /= storage_name;
+
+    m_storage_path = string(curr_path);
+
+    cout << m_storage_path << endl;
 
     // Allow only one connection to the kvp storage file
-    string file_lock = m_storage_name + ".lock";
+    m_lock_path = m_storage_path + ".lock";
 
-    int m_lock = open(file_lock.c_str(), O_CREAT | O_RDWR, 0666);
+    int m_lock = open(m_lock_path.c_str(), O_CREAT | O_RDWR, 0666);
     int rc = flock(m_lock, LOCK_EX | LOCK_NB);
     if(rc) {
         if(EWOULDBLOCK == errno) {
@@ -74,18 +80,16 @@ KvpStorage<T_key, T_value>::KvpStorage(string storage_name) {
 template <class T_key, class T_value>
 KvpStorage<T_key, T_value>::~KvpStorage(){
 
-    ofstream ofs(m_storage_name.c_str(), ofstream::trunc);
+    ofstream ofs(m_storage_path.c_str(), ofstream::trunc);
 
     for (auto const& pair : m_storage) {
         ofs << pair.first << endl << pair.second << endl;
     }
 
-    string file_lock = m_storage_name + ".lock";
-
     // Release file lock
     flock(m_lock, LOCK_UN);
     close(m_lock);
-    remove(file_lock.c_str());
+    remove(m_lock_path.c_str());
 };
 
 /**

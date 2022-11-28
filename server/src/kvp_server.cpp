@@ -6,6 +6,7 @@
 */
 #include "kvp_server.hpp"
 
+#include <iostream>
 #include <cstring>
 #include <errno.h>
 #include <stdio.h>
@@ -52,9 +53,11 @@ void KvpServer::execute(size_t msg_size, KvpMessageSt_t *kvp_msg) {
     uint32_t key_size = 0;
     uint32_t value_size = 0;
     uint32_t msg_index = 0;
+    
 
     // Check if message received contains the correct header information.
-    if (msg_size >= KVP_MSG_HEADER) {
+    if (msg_size == sizeof(KvpMessageSt_t)) {
+
         memcpy((void*)&pid, (void*)(&kvp_msg->msg_buf[msg_index]), sizeof(pid_t));
         msg_index += sizeof(pid_t);
 
@@ -67,33 +70,34 @@ void KvpServer::execute(size_t msg_size, KvpMessageSt_t *kvp_msg) {
         memcpy((void*)&value_size, (void*)(&kvp_msg->msg_buf[msg_index]), sizeof(uint32_t));
         msg_index += sizeof(uint32_t);
 
-        // Check if message size match the header plus the key and value payloads
-        if (msg_size == KVP_MSG_HEADER + key_size + value_size) {
-            string key(&kvp_msg->msg_buf[msg_index]);
-            msg_index += key_size;
+        cout << pid << " " << operation << " " << key_size << " " << value_size << endl;
 
-            string value(&kvp_msg->msg_buf[msg_index]);
+        string key(&kvp_msg->msg_buf[msg_index]);
+        msg_index += key_size;
+        msg_index ++;
 
-            switch (operation) {
+        string value(&kvp_msg->msg_buf[msg_index]);
 
-                case KPV_MSG_OP_GET:
-                {
+        switch (operation) {
 
-                }
-                break;
+            case KPV_MSG_OP_GET:
+            {
 
-                case KPV_MSG_OP_SET:
-                {
-                    m_kvp_storage->set(key, value);
-                }
-                break;
-
-                case KPV_MSG_OP_DELETE:
-                {
-                    m_kvp_storage->del(key);
-                }
-                break;
             }
+            break;
+
+            case KPV_MSG_OP_SET:
+            {
+                cout << "SET" << " " << key << " " << value << endl;
+                m_kvp_storage->set(key, value);
+            }
+            break;
+
+            case KPV_MSG_OP_DELETE:
+            {
+                m_kvp_storage->del(key);
+            }
+            break;
         }
     }
 }

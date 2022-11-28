@@ -22,7 +22,8 @@ class KvpStorage {
     private:
     int m_lock;
     map<T_key, T_value> m_storage;
-    string m_storage_name;
+    string m_storage_path;
+    string m_lock_path;
 
     public:
     KvpStorage(string storage_name);

@@ -12,6 +12,7 @@
 /**
  * \brief Default queue channel used between Client and Server
 */
+#define KVP_DEFAULT_STORAGE_STR ("kvp_default.dat")
 
 /**
  * \brief Maximum size of the KVP Key. Maximum size will be one less as it is a null terminated string.
@@ -21,7 +22,7 @@
 /**
  * \brief Maximum size of the KVP Pair. Maximum size will be one less as it is a null terminated string.
 */
-#define KVP_MSG_MAX_PAIR_SIZE 1024
+#define KVP_MSG_MAX_VALUE_SIZE 1024
 
 /**
  * \brief Maximum size of the KVP Message
@@ -33,7 +34,7 @@
  * |     pid_t   | uint32_t  |    uint32     |      uint32     |     N chars |      M chars  |  
 */
 #define KVP_MSG_HEADER (sizeof(pid_t) + 3 * sizeof(uint32_t))
-#define KVP_MSG_MAX_SIZE (KVP_MSG_HEADER + KVP_MSG_MAX_KEY_SIZE + KVP_MSG_MAX_PAIR_SIZE)
+#define KVP_MSG_MAX_SIZE (KVP_MSG_HEADER + KVP_MSG_MAX_KEY_SIZE + KVP_MSG_MAX_VALUE_SIZE)
 
 /**
  * \brief Enumeration with the allowed operations

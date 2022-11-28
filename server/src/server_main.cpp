@@ -7,6 +7,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string>
+#include <signal.h>
 
 #include "kvp_server.hpp"
 
@@ -14,21 +15,45 @@
 
 using namespace std;
 
+KvpServer *kvp_server = NULL;
+
+/**
+ * \brief Exit handler used to save server when terminated by user.
+*/
+void exit_handler(int s){
+    
+    if (kvp_server != NULL) {
+        delete kvp_server;
+        kvp_server = NULL;
+    }
+
+    exit(s);
+}
+
 int main() {
 
     KvpMessageSt_t kvp_msg = {0};
 
-    string kvp_path("data/kvp_default.dat");
+    string kvp_path(KVP_DEFAULT_STORAGE_STR);
 
-    KvpServer kvp_server(kvp_path);
+    kvp_server = new KvpServer(kvp_path);
 
-    while (true) {
+    signal(SIGINT, exit_handler);
 
-        size_t num_bytes = kvp_server.receive(&kvp_msg);
+    try {
+        while (true) {
 
-        cout << num_bytes << endl;
+            size_t num_bytes = kvp_server->receive(&kvp_msg);
 
-        kvp_server.execute(num_bytes, &kvp_msg);
+            cout << num_bytes << endl;
+
+            kvp_server->execute(num_bytes, &kvp_msg);
+        }
+    } catch (...) {
+        if (kvp_server != NULL) {
+            delete kvp_server;
+            kvp_server = NULL;
+        }
     }
 
     return 0;

@@ -7,21 +7,23 @@
 
 #include <string>
 
+#include "kvp_message.h"
+
 using namespace std;
 
 class KvpClient {
 
     private:
     string m_storage_name;
-    void send_msg(KvpMessageOperationEn_t op, string key, string value)
+    string send_msg(KvpMessageOperationEn_t op, string key, string value);
 
     public:
-    KvpClient();
+    KvpClient(string storage_name);
     ~KvpClient();
 
-    void set(string key, string value);
-    void get(string key);
-    void del(string key);
+    string set(string key, string value);
+    string get(string key);
+    string del(string key);
 };
 
 
