@@ -13,6 +13,9 @@ server/src/ServerMain
 server/src/libKvpServer.so
 server/src/libKvpStorage.so
 
+common/src/libKvpMessage.so
+test/run_ut_kvp_server
+
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
