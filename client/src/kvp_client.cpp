@@ -23,18 +23,31 @@ KvpClient::~KvpClient() {
     
 }
 
+/**
+ * \brief SET command
+*/
 string KvpClient::set(string key, string value){
     return this->send_msg(KVP_MSG_OP_SET, key, value);
 }
 
+/**
+ * \brief GET command
+*/
 string KvpClient::get(string key){
     return this->send_msg(KVP_MSG_OP_GET, key, "");
 }
 
+/**
+ * \brief DELETE command
+*/
 string KvpClient::del(string key) {
     return this->send_msg(KVP_MSG_OP_DELETE, key, "");
 }
 
+/**
+ * \brief Private function responsible to setting the operation and sending it 
+ * to the KVP Server.
+*/
 string KvpClient::send_msg(KvpMessageOperationEn_t op, string key, string value) {
 
     int msgid = 0;

@@ -13,6 +13,10 @@
 
 using namespace std;
 
+/**
+ * \brief KVP Server will instantiate a specialization of KVP Storage
+ * cabable of storing Key and Value Pairs as strings.
+*/
 class KvpServer {
 
     private:

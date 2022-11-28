@@ -19,6 +19,13 @@
 
 using namespace std;
 
+/**
+ * Class Constructor
+ * 
+ * \brief Constructor for the KVP Server
+ * 
+ * \param storage_name Unique name when instantiating the server.
+*/
 KvpServer::KvpServer(string storage_name) {
 
     m_kvp_storage = new KvpStorage<string, string>(storage_name);
@@ -32,6 +39,9 @@ KvpServer::KvpServer(string storage_name) {
     m_queue_id = msgget(m_server_key, 0666 | IPC_CREAT);
 }
 
+/**
+ * Class Destructor
+*/
 KvpServer::~KvpServer() {
 
     // Destroy message queue
@@ -40,16 +50,31 @@ KvpServer::~KvpServer() {
     delete m_kvp_storage;
 }
 
+/**
+ * \brief Receive a message from the IPC queue.
+ * 
+ * \param kvp_msg Message data that will be received.
+*/
 size_t KvpServer::receive(KvpMessageSt_t *kvp_msg){
 
     return msgrcv(m_queue_id, kvp_msg, sizeof(KvpMessageSt_t), 1, 0);
 }
 
+/**
+ * \brief Send a message from the IPC queue.
+ * 
+ * \param kvp_msg Message data that will be send.
+*/
 void KvpServer::respond(KvpMessageSt_t *kvp_msg){
 
     msgsnd(m_queue_id, kvp_msg, sizeof(KvpMessageSt_t), IPC_NOWAIT);
 }
 
+/**
+ * \brief Receive a kvp data and interact with the KVP Storage
+ * 
+ * \param kvp_msg Message data that will be received.
+*/
 void KvpServer::execute(KvpMessageDataSt_t* kvp_data) {
     
     try{

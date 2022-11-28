@@ -4,10 +4,13 @@
 
 #include <stdexcept>
 
+#define DEFAULT_TEST_STORAGE "test_storage.dat"
+
 // Basic test to assert a element is added. 
 TEST(KvpStorageTest, testAddDataResultOk) {
 
-    KvpStorage<string, string> kvp_storage("test/storage.dat");
+    remove(DEFAULT_TEST_STORAGE);
+    KvpStorage<string, string> kvp_storage(DEFAULT_TEST_STORAGE);
 
     kvp_storage.set("K1", "V1");
 
@@ -18,12 +21,15 @@ TEST(KvpStorageTest, testAddDataResultOk) {
 
     // Empty map after operations
     kvp_storage.clear();
+
+
 }
 
 // Basic Test to assert element is deleted
 TEST(KvpStorageTest, testEraseDataResultOk) {
 
-    KvpStorage<string, string> kvp_storage("test/storage.dat");
+    remove(DEFAULT_TEST_STORAGE);
+    KvpStorage<string, string> kvp_storage(DEFAULT_TEST_STORAGE);
 
     kvp_storage.set("K1", "V1");
 
@@ -38,7 +44,8 @@ TEST(KvpStorageTest, testEraseDataResultOk) {
 // Basic Test to assert map is cleared
 TEST(KvpStorageTest, testClearDataResultOk) {
 
-    KvpStorage<string, string> kvp_storage("test/storage.dat");
+    remove(DEFAULT_TEST_STORAGE);
+    KvpStorage<string, string> kvp_storage(DEFAULT_TEST_STORAGE);
 
     kvp_storage.set("K1", "V1");
     kvp_storage.set("K2", "V2");
@@ -54,7 +61,8 @@ TEST(KvpStorageTest, testClearDataResultOk) {
 // Test Raise exception when key does not exist
 TEST(KvpStorageTest, testKeyInvalidRaiseException) {
 
-    KvpStorage<string, string> kvp_storage("test/storage.dat");
+    remove(DEFAULT_TEST_STORAGE);
+    KvpStorage<string, string> kvp_storage(DEFAULT_TEST_STORAGE);
 
     EXPECT_THROW(kvp_storage.get("K1"), std::out_of_range);
 }
@@ -62,13 +70,14 @@ TEST(KvpStorageTest, testKeyInvalidRaiseException) {
 // Test Persistance of the KVP Storage
 TEST(KvpStorageTest, testPersistence) {
 
-    KvpStorage<string, string> *kvp_storage = new KvpStorage<string, string>("test/storage.dat");
+    remove(DEFAULT_TEST_STORAGE);
+    KvpStorage<string, string> *kvp_storage = new KvpStorage<string, string>(DEFAULT_TEST_STORAGE);
 
     kvp_storage->set("K1", "V1");
 
     delete kvp_storage;
 
-    KvpStorage<string, string> *kvp_storage2 = new KvpStorage<string, string>("test/storage.dat");
+    KvpStorage<string, string> *kvp_storage2 = new KvpStorage<string, string>(DEFAULT_TEST_STORAGE);
 
     EXPECT_EQ(1, kvp_storage2->size());
 

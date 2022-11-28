@@ -5,6 +5,13 @@
 
 #include <cstring>
 
+/**
+ * \brief Convert a KVP Message received to kvp data structure to be used in the
+ * server/client
+ * 
+ * \param kvp_msg Pointer to the kvp_msg data structure to be read.
+ * \param kvp_data Pointer to the kvp_data data structure to be written.
+*/
 void buf_to_kvp_data(KvpMessageSt_t *kvp_msg, KvpMessageDataSt_t *kvp_data){
 
     uint32_t msg_index = 0;
@@ -31,6 +38,12 @@ void buf_to_kvp_data(KvpMessageSt_t *kvp_msg, KvpMessageDataSt_t *kvp_data){
     kvp_data->value_size = kvp_data->value.size();
 }
 
+/**
+ * \brief Convert a KVP Data received to the kvp message to be send
+ * 
+ * \param kvp_data Pointer to the kvp_data data structure to be read.
+ * \param kvp_msg Pointer to the kvp_msg data structure to be written.
+*/
 void kvp_data_to_buf(KvpMessageDataSt_t *kvp_data, KvpMessageSt_t *kvp_msg){
 
     uint32_t msg_index = 0;

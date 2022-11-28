@@ -11,6 +11,9 @@
 
 using namespace std;
 
+/**
+ * \brief Responsible for providing the methods to interact with the KVP Server
+*/
 class KvpClient {
 
     private:

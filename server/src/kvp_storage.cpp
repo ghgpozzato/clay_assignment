@@ -35,8 +35,6 @@ KvpStorage<T_key, T_value>::KvpStorage(string storage_name) {
 
     m_storage_path = string(curr_path);
 
-    cout << m_storage_path << endl;
-
     // Allow only one connection to the kvp storage file
     m_lock_path = m_storage_path + ".lock";
 

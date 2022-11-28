@@ -11,6 +11,10 @@
 
 using namespace std;
 
+/**
+ * \brief Main application of the client. Responsible for querying data from the
+ * user and interacting with the KVP Server.
+*/
 int main(int argc, char** argv) {
 
     ifstream *file_input = NULL;
