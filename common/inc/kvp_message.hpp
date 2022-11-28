@@ -50,10 +50,10 @@ using namespace std;
  * \brief Enumeration with the allowed operations.
 */
 typedef enum {
-    KPV_MSG_OP_NONE = 0,
-    KPV_MSG_OP_GET = 1,
-    KPV_MSG_OP_SET = 2,
-    KPV_MSG_OP_DELETE = 3,
+    KVP_MSG_OP_NONE = 0,
+    KVP_MSG_OP_GET = 1,
+    KVP_MSG_OP_SET = 2,
+    KVP_MSG_OP_DELETE = 3,
     KVP_MSG_OP_OK = 4,
     KVP_MSG_OP_ERROR = 5,
 } KvpMessageOperationEn_t;

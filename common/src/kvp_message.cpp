@@ -7,7 +7,7 @@
 
 void buf_to_kvp_data(KvpMessageSt_t *kvp_msg, KvpMessageDataSt_t *kvp_data){
 
-    uint32_t msg_index;
+    uint32_t msg_index = 0;
 
     memcpy((void*)&kvp_data->pid, (void*)(&kvp_msg->msg_buf[msg_index]), sizeof(pid_t));
     msg_index += sizeof(pid_t);
@@ -58,4 +58,6 @@ void kvp_data_to_buf(KvpMessageDataSt_t *kvp_data, KvpMessageSt_t *kvp_msg){
     msg_index += kvp_data->value_size;
     kvp_msg->msg_buf[msg_index] = '\0';
     msg_index++;
+
+    kvp_msg->msg_key = kvp_data->pid;
 }

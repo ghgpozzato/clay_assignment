@@ -50,35 +50,34 @@ void KvpServer::respond(KvpMessageSt_t *kvp_msg){
     msgsnd(m_queue_id, kvp_msg, sizeof(KvpMessageSt_t), IPC_NOWAIT);
 }
 
-void KvpServer::execute(size_t msg_size, KvpMessageSt_t *kvp_msg, KvpMessageDataSt_t* kvp_data) {
-
-    buf_to_kvp_data(kvp_msg, kvp_data);
+void KvpServer::execute(KvpMessageDataSt_t* kvp_data) {
     
     try{
         if ((kvp_data->key_size < KVP_MSG_MAX_KEY_SIZE) && 
             (kvp_data->value_size < KVP_MSG_MAX_VALUE_SIZE)) {
-            
-            cout << kvp_data->pid << " " << kvp_data->op << " " << kvp_data->key_size << " " << kvp_data->value_size << endl;
 
             switch (kvp_data->op) {
 
-                case KPV_MSG_OP_GET:
+                case KVP_MSG_OP_GET:
                 {
                     //Update value and value size;
                     kvp_data->value = m_kvp_storage->get(kvp_data->key);
                     kvp_data->value_size = kvp_data->value.size();
+
+                    cout << kvp_data->pid << " " << "GET" << " " << kvp_data->key << " " << kvp_data->value << endl;
                 }
                 break;
 
-                case KPV_MSG_OP_SET:
+                case KVP_MSG_OP_SET:
                 {
-                    cout << "SET" << " " << kvp_data->key << " " << kvp_data->value << endl;
+                    cout << kvp_data->pid << " " << "SET" << " " << kvp_data->key << " " << kvp_data->value << endl;
                     m_kvp_storage->set(kvp_data->key, kvp_data->value);
                 }
                 break;
 
-                case KPV_MSG_OP_DELETE:
+                case KVP_MSG_OP_DELETE:
                 {
+                    cout << kvp_data->pid << " " << "DELETE" << " " << kvp_data->key << endl;
                     m_kvp_storage->del(kvp_data->key);
                 }
                 break;

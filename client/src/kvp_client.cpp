@@ -24,34 +24,39 @@ KvpClient::~KvpClient() {
 }
 
 string KvpClient::set(string key, string value){
-    return this->send_msg(KPV_MSG_OP_SET, key, value);
+    return this->send_msg(KVP_MSG_OP_SET, key, value);
 }
 
 string KvpClient::get(string key){
-    return this->send_msg(KPV_MSG_OP_GET, key, "");
+    return this->send_msg(KVP_MSG_OP_GET, key, "");
 }
 
 string KvpClient::del(string key) {
-    return this->send_msg(KPV_MSG_OP_DELETE, key, "");
+    return this->send_msg(KVP_MSG_OP_DELETE, key, "");
 }
 
 string KvpClient::send_msg(KvpMessageOperationEn_t op, string key, string value) {
 
-    int msgid;
+    int msgid = 0;
 
-    pid_t pid = getpid();
-    uint32_t key_size = key.size();
-    uint32_t value_size = value.size();
-    uint32_t msg_index = 0;
-    uint32_t op_value = (uint32_t)op;
+    KvpMessageDataSt_t kvp_data = {0};
 
-    KvpMessageSt_t message;
+    KvpMessageSt_t message = {0};
+
+    kvp_data.pid = getpid();
+    kvp_data.op = op;
+    kvp_data.key = key;
+    kvp_data.key_size = key.size();
+    kvp_data.value = value;
+    kvp_data.value_size = value.size();
+
+    kvp_data_to_buf(&kvp_data, &message);
 
     string result("");
 
-    if ((key_size + 1 <= KVP_MSG_MAX_KEY_SIZE) &&
-        (key_size > 0) && 
-        (value_size + 1 <= KVP_MSG_MAX_VALUE_SIZE)) {
+    if ((kvp_data.key_size < KVP_MSG_MAX_KEY_SIZE) &&
+        (kvp_data.key_size > 0) && 
+        (kvp_data.value_size < KVP_MSG_MAX_VALUE_SIZE)) {
   
         // Create unique key for message
         key_t unique_key = ftok(m_storage_name.c_str(), 99);
@@ -60,37 +65,26 @@ string KvpClient::send_msg(KvpMessageOperationEn_t op, string key, string value)
         msgid = msgget(unique_key, 0666 | IPC_CREAT);
         message.msg_key = 1;
 
-        //Put message together
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(&pid), sizeof(pid_t));
-        msg_index += sizeof(pid_t);
-
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(&op_value), sizeof(uint32_t));
-        msg_index += sizeof(uint32_t);
-
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(&key_size), sizeof(uint32_t));
-        msg_index += sizeof(uint32_t);
-
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(&value_size), sizeof(uint32_t));
-        msg_index += sizeof(uint32_t);
-
-        // Copy key and value with null terminated character
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(key.c_str()), key_size);
-        msg_index += key_size;
-        message.msg_buf[msg_index] = '\0';
-        msg_index ++;
-
-        memcpy((void*)(&message.msg_buf[msg_index]), (void*)(value.c_str()), value_size);
-        msg_index += value_size;
-        message.msg_buf[msg_index] = '\0';
-        msg_index ++;
-  
         // Send msg to server
         msgsnd(msgid, &message, sizeof(KvpMessageSt_t), 0);
 
         // Wait for answer
-        msgrcv(msgid, &message, sizeof(KvpMessageSt_t), pid, 0);
+        msgrcv(msgid, &message, sizeof(KvpMessageSt_t), kvp_data.pid, 0);
+        
+        // Convert to kvp data
+        buf_to_kvp_data(&message, &kvp_data);
 
-
+        if (kvp_data.op == KVP_MSG_OP_OK) {
+            if (op == KVP_MSG_OP_GET) {
+                result = string(kvp_data.value);
+            } else {
+                result = string("OK");
+            }
+        } else {
+            result = string("");
+        }
+    } else {
+        result = string("");
     }
     
     return result;

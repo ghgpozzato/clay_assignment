@@ -44,11 +44,13 @@ int main() {
     try {
         while (true) {
 
-            size_t num_bytes = kvp_server->receive(&kvp_msg);
+            kvp_server->receive(&kvp_msg);
 
-            cout << num_bytes << endl;
+            buf_to_kvp_data(&kvp_msg, &kvp_data);
 
-            kvp_server->execute(num_bytes, &kvp_msg, &kvp_data);
+            kvp_server->execute(&kvp_data);
+
+            kvp_data_to_buf(&kvp_data, &kvp_msg);
 
             kvp_server->respond(&kvp_msg);
         }
