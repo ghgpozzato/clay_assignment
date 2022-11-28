@@ -2,6 +2,7 @@ client/CMakeFiles/*
 server/CMakeFiles/*
 common/CMakeFiles/*
 test/CMakeFiles/*
+build/*
 
 .vscode
 

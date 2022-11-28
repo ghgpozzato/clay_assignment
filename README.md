@@ -37,4 +37,8 @@ cmake 3.24.2
 # Intiate the client
 % ./KVPStorage
 
+# TBD 
+Unit tests could be improved. I was able to set the framework and it can be extended with more time.
+KVPStorage to use a database
+Use of boost library for serialization.
 
