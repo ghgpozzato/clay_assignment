@@ -13,7 +13,7 @@
 #include <sys/msg.h>
 #include <unistd.h>
 
-#include "kvp_message.h"
+#include "kvp_message.hpp"
 
 KvpClient::KvpClient(string storage_name) {
     m_storage_name = storage_name;
@@ -83,11 +83,14 @@ string KvpClient::send_msg(KvpMessageOperationEn_t op, string key, string value)
         msg_index += value_size;
         message.msg_buf[msg_index] = '\0';
         msg_index ++;
+  
+        // Send msg to server
+        msgsnd(msgid, &message, sizeof(KvpMessageSt_t), 0);
 
-        cout << message.msg_buf << "\n";
-    
-        // msgsnd to send message
-        msgsnd(msgid, &message, sizeof(message), 0);
+        // Wait for answer
+        msgrcv(msgid, &message, sizeof(KvpMessageSt_t), pid, 0);
+
+
     }
     
     return result;

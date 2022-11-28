@@ -7,7 +7,7 @@
 
 #include <string>
 
-#include "kvp_message.h"
+#include "kvp_message.hpp"
 
 using namespace std;
 

@@ -7,7 +7,7 @@
 
 #include "kvp_storage.hpp"
 
-#include "kvp_message.h"
+#include "kvp_message.hpp"
 
 #include "sys/ipc.h"
 
@@ -25,7 +25,8 @@ class KvpServer {
     ~KvpServer();
 
     size_t receive(KvpMessageSt_t *kvp_msg);
-    void execute(size_t msg_size, KvpMessageSt_t *kvp_msg);
+    void respond(KvpMessageSt_t *kvp_msg);
+    void execute(size_t msg_size, KvpMessageSt_t *kvp_msg, KvpMessageDataSt_t *kvp_data);
 };
 
 

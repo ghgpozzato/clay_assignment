@@ -11,7 +11,7 @@
 
 #include "kvp_server.hpp"
 
-#include "kvp_message.h"
+#include "kvp_message.hpp"
 
 using namespace std;
 
@@ -33,6 +33,7 @@ void exit_handler(int s){
 int main() {
 
     KvpMessageSt_t kvp_msg = {0};
+    KvpMessageDataSt_t kvp_data = {0};
 
     string kvp_path(KVP_DEFAULT_STORAGE_STR);
 
@@ -47,7 +48,9 @@ int main() {
 
             cout << num_bytes << endl;
 
-            kvp_server->execute(num_bytes, &kvp_msg);
+            kvp_server->execute(num_bytes, &kvp_msg, &kvp_data);
+
+            kvp_server->respond(&kvp_msg);
         }
     } catch (...) {
         if (kvp_server != NULL) {
