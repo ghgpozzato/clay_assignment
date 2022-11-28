@@ -10,6 +10,10 @@
 #include <sys/msg.h>
 
 /**
+ * \brief Default queue channel used between Client and Server
+*/
+
+/**
  * \brief Maximum size of the KVP Key. Maximum size will be one less as it is a null terminated string.
 */
 #define KVP_MSG_MAX_KEY_SIZE 256
