@@ -9,6 +9,7 @@ cmake 3.24.2
 
 ## Building Project 
 The project was build using cmake. The following commands will build the whole project and test cases. Go to the root of the project.
+
 % ./build_kvp
 
 ## Implementation remarks
@@ -18,10 +19,12 @@ Because of limited time the KVPStorage was implemented using standard map. Boost
 
 ## Executing Unit tests
 Basic unit tests were were and can be executed from the build folder. 
+
 % ./run_ut
 
 ## Executing Integration/Manual tests
 To ensure integration was working properly, integration test cases using input files were created. This is done with the following command
+
 % ./KVPStorageServer_fin F_IN
 
 F_IN has a list of commands.
@@ -33,9 +36,11 @@ To ensure multiple clients the client can be executed without the server. This w
 To execute the KVPStorage:
 
 Initiate the server
+
 % ./KVPStorageServer
 
-Intiate the client
+Initiate the client
+
 % ./KVPStorage
 
 ## TBD 
